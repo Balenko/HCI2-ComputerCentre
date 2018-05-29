@@ -17,14 +17,16 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
         <Style TargetType="syncfusion:ScheduleDaysHeaderViewControl">
             <Setter Property="FontSize" Value="12" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="syncfusion:ScheduleDaysHeaderViewControl">
                         <Grid>
-                            <Border x:Name="border" BorderThickness="1,0,0,0"
+                            <Border x:Name="border" BorderThickness="2,0,0,0"
                                     Background="{TemplateBinding HeaderBrush}"
+                                    BorderBrush="{TemplateBinding DayViewVerticalLineStroke}"
                                     >
                                 <Grid>
                                     <Grid.RowDefinitions>
@@ -37,12 +39,13 @@
                                                Visibility="Collapsed" />
 
                                     <Border VerticalAlignment="Center">
-                                        <syncfusion:CustomTextBlock HorizontalAlignment="Left" Margin="15,5,0,5"
+                                        <syncfusion:CustomTextBlock HorizontalAlignment="Center" Margin="15,5,0,5"
                                                                     Foreground="{Binding TextForeground, RelativeSource={RelativeSource TemplatedParent}}"
                                                                     x:Name="DaysTextBlock"
                                                                     VerticalAlignment="Center"
                                                                     DateTimeValue="{Binding DayText, RelativeSource={RelativeSource TemplatedParent}}"
                                                                     DateTimeFormat="dddd"
+                                                                    
                                                                     FontSize="{TemplateBinding FontSize}"
                                                                     FontStyle="Normal" />
                                     </Border>
@@ -54,14 +57,15 @@
             </Setter>
         </Style>
     </Window.Resources>
+
     <Grid>
-    
-        
         <DockPanel>
             <DockPanel DockPanel.Dock="Top">
                 <Button >
                 </Button>
                 
+
+
                 <StackPanel x:Name="ClassromsPanel" HorizontalAlignment="Right" Orientation="Horizontal"
                                     Margin="4">
                     <Label Margin="0,3,5,0" >Classroom:</Label>
@@ -70,15 +74,41 @@
                                       SelectedItem="{Binding Classroom}" />
                 </StackPanel>
             </DockPanel>
+
             <DockPanel DockPanel.Dock="Bottom">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition />
+                
 
-                    </Grid.ColumnDefinitions>
+                    <Grid>
+                        
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.8*" />
+                            <ColumnDefinition Width="0.2*" />
 
-                    <syncfusion:SfSchedule AllowEditing="False"
+                        </Grid.ColumnDefinitions>
+
+                    
+
+
+                    <syncfusion:SfSchedule
+                        DayViewColumnCount="10"
+                         x:Name="Schedule"
+                        Resource="Classroom"
+                        ScheduleType="WorkWeek"
+                        DayHeaderOrder="OrderByDate" 
+                        
+                        Grid.Column="0" Grid.Row="0"
+                        CurrentDateBackground="White"
+                        CurrentDateForeground="DimGray"
+                        TimeInterval="FifteenMin"
+                        WorkStartHour="7" WorkEndHour="22"
+                        ShowNonWorkingHours="False"
+                        TimeMode="TwentyFourHours"
+                        FirstDayOfWeek="Monday"
+                        NonWorkingDays="Sunday"
+                        ShowAllDay="False"
+                        
+                        >
+                            <!--AllowEditing="False"
                         CurrentDateBackground="White"
                         CurrentDateForeground="DimGray"
                         Grid.Column="0" Grid.Row="0" x:Name="Schedule"
@@ -88,8 +118,8 @@
                         ShowNonWorkingHours="False"
                         TimeMode="TwentyFourHours" ShowAllDay="False"
                         FirstDayOfWeek="Monday"
-                        NonWorkingDays="sunday">
-                        <!--
+                        NonWorkingDays="sunday" Grid.ColumnSpan="2" Margin="0,0,-34,-107">
+                        
                         AllowDrop="True" DragEnter="Schedule_DragEnter"
                         Drop="Schedule_Drop"
                         AppointmentEditorOpening="Schedule_AppointmentEditorOpening"
@@ -99,31 +129,56 @@
                         AppointmentEndResizing="Schedule_AppointmentEndResizing"
                         AppointmentDragging="Schedule_AppointmentDragging"
                         -->
+                            <!--
                         <syncfusion:SfSchedule.AppointmentTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Rectangle 
-                                                               VerticalAlignment="Stretch"
-                                                               HorizontalAlignment="Stretch" />
-                                    <StackPanel>
-                                        <TextBlock Text="{Binding Subject}"
-                                                                   HorizontalAlignment="Left"
-                                                                   FontSize="15" Foreground="White" FontWeight="Normal" />
-                                        <WrapPanel>
-                                            <TextBlock Foreground="White" Text="Terms: "
-                                                                       FontWeight="Normal" />
-                                            <TextBlock Foreground="White"
-                                                                       Text="{Binding Session.Terms}"
-                                                                       FontWeight="Normal" />
-                                        </WrapPanel>
-                                    </StackPanel>
-                                </Grid>
-                            </DataTemplate>
-                        </syncfusion:SfSchedule.AppointmentTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Rectangle 
+                                                            VerticalAlignment="Stretch"
+                                                            HorizontalAlignment="Stretch" />
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Subject}"
+                                                                HorizontalAlignment="Left"
+                                                                FontSize="15" Foreground="White" FontWeight="Normal" />
+                                    <WrapPanel>
+                                        <TextBlock Foreground="White" Text="Terms: "
+                                                                    FontWeight="Normal" />
+                                        <TextBlock Foreground="White"
+                                                                    Text="{Binding Session.Terms}"
+                                                                    FontWeight="Normal" />
+                                    </WrapPanel>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                        </syncfusion:SfSchedule.AppointmentTemplate>-->
+                        <syncfusion:SfSchedule.LayoutTransform>
+
+
+                        <ScaleTransform CenterX="0" CenterY="0"
+                                ScaleX="{Binding ElementName=uiScaleSlider,Path=Value}"
+                                ScaleY="{Binding ElementName=uiScaleSlider,Path=Value}"/>
+
+                        </syncfusion:SfSchedule.LayoutTransform>
+
                     </syncfusion:SfSchedule>
+
+                    <Slider Grid.Column="1" Grid.Row="0" x:Name="uiScaleSlider"
+                    ToolTip="Determines the UI scale factor."
+                    Value="1" Minimum="0.1" Maximum="4"/>
+
+
+
                 </Grid>
+                
+                
             </DockPanel>
+            
+            
         </DockPanel>
+
+        
+
     </Grid>
+    
     
 </Window>
